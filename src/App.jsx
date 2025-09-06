@@ -6,7 +6,7 @@ import Pricing from "./pages/Pricing";
 import Login from "./pages/Login";
 import DashboardAdmin from "./pages/AdminDashboard";
 import DashboardUser from "./pages/UserDashboard";
-import Signup from "./pages/Signup";
+import Signup from "./pages/Signup";    
 
 export default function App(){
     return (
