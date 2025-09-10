@@ -1,12 +1,14 @@
-const DashboardUser = () =>{
+const DashboardUser = ({userDetails}) =>{
+    const {username, email} = userDetails || {};
+
     return (
         <div className="min-h-screen bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">User Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Welcome, {username}</h1>
               <p className="text-gray-600">Welcome back! Manage your parking reservations.</p>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow p-6 mb-6">
@@ -20,7 +22,7 @@ const DashboardUser = () =>{
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="bg-white rounded-lg shadow p-6">
                   <h2 className="text-xl font-semibold mb-4">Recent Bookings</h2>
                   <div className="space-y-3">
@@ -45,7 +47,7 @@ const DashboardUser = () =>{
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow p-6">
                   <h2 className="text-xl font-semibold mb-4">Account Summary</h2>
@@ -67,13 +69,13 @@ const DashboardUser = () =>{
                     Add Funds
                   </button>
                 </div>
-                
+
                 <div className="bg-white rounded-lg shadow p-6">
                   <h2 className="text-xl font-semibold mb-4">Profile</h2>
                   <div className="text-center">
                     <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-3"></div>
-                    <p className="font-medium">John Doe</p>
-                    <p className="text-sm text-gray-600">john.doe@email.com</p>
+                    <p className="font-medium">{username}</p>
+                    <p className="text-sm text-gray-600">{email}</p>
                     <button className="mt-3 text-blue-600 text-sm hover:underline">
                       Edit Profile
                     </button>

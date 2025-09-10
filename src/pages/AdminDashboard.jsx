@@ -1,11 +1,13 @@
-const DashboardAdmin = () =>{
+const DashboardAdmin = ({adminDetails}) =>{
+    const {username, email, role} = adminDetails || {};
+    
     return (
         <div className="min-h-screen bg-gray-100">
             <header className="bg-white shadow-md px-6 py-4">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-3xl font-bold text-gray-800">Car Parking Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">{role} Dashboard</h1>
                     <div className="text-gray-600">
-                        <span>Welcome, Admin</span>
+                        <span>Welcome, {username}</span>
                     </div>
                 </div>
             </header>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () =>{
     const [selectedRole, setSelectedRole] = useState("");
@@ -17,22 +17,17 @@ const Login = () =>{
         try{
             const response = await axios.post('http://localhost:2025/api/auth/login',{
                 email: email,
-                selectedRole: selectedRole,
+                role: selectedRole,
                 password: password,
-            },{
-                headers:{
-                    "Content-Type" : "application/json"
-                }
             });
+
+            localStorage.setItem("token", response.data.token);
 
             setMessage(response.data.message);
 
             setTimeout(()=>{
-                if(response.data.role === 'Admin'){
-                    navigate('/admindashboard');
-                } else if(response.data.role === 'User'){
-                    navigate('/userdashboard');                
-                }
+                window.location.reload();
+                navigate('/');
             }, 2000);
 
 
@@ -43,9 +38,6 @@ const Login = () =>{
 
     return (
         <div>
-            <h1 className="text-center text-2xl font-bold text-gray-900">
-                <a href="/" className="hover:text-blue-600 transition duration-300">SMART PARKING SYSTEM</a>
-            </h1>
             {/* LOGIN FORM */}
             <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8 border rounded-xl p-5 bg-white shadow-lg">

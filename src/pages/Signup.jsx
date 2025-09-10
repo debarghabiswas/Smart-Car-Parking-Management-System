@@ -1,14 +1,42 @@
 import { useState } from "react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const Signup = () =>{
-    const [selected, setSelected] = useState("");
-    const handleChange = (e) => setSelected(e.target.value);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+
+    const [selectedRole, setSelectedRole] = useState("");
+    const handleChange = (e) => setSelectedRole(e.target.value);
+
+    const navigate = useNavigate();
+
+    const handleSignUp = async (e)=>{
+        e.preventDefault();
+        try{
+            const response = await axios.post('http://localhost:2025/api/auth/register',{
+                username: username,
+                email: email,
+                role: selectedRole,
+                password: password,
+            });
+
+            setMessage(response.data.message);
+
+            setTimeout(()=>{
+                // window.location.reload();
+                navigate('/login');
+            }, 2000);
+
+        } catch(err){
+            setMessage(err.response?.data?.message ||"ERROR SIGNING UP!");
+        }
+    };
 
     return(
         <div>
-            <h1 className="text-center text-2xl font-bold text-gray-900">
-                <a href="/" className="hover:text-blue-600 transition duration-300">SMART PARKING SYSTEM</a>
-            </h1>
             <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8 border rounded-xl p-5 bg-white shadow-lg">
                     <div>
@@ -16,7 +44,8 @@ const Signup = () =>{
                             SIGNUP FORM
                         </h1>
                     </div>
-                    <form className="mt-8 space-y-6">
+                    <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
+                        <p className="text-center">{message}</p>
                         <div className="space-y-4">
                             <div className="form-group">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
@@ -24,6 +53,8 @@ const Signup = () =>{
                                     type="text"
                                     id="name"
                                     name="name"
+                                    value={username}
+                                    onChange={(e)=>setUsername(e.target.value)}
                                     required
                                     className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 />
@@ -34,6 +65,8 @@ const Signup = () =>{
                                     type="email" 
                                     id="email" 
                                     name="email" 
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}
                                     required 
                                     className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 />
@@ -41,7 +74,7 @@ const Signup = () =>{
                             <div className="form-group">
                                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role:</label>
                                 <select
-                                    value={selected}
+                                    value={selectedRole}
                                     onChange={handleChange}
                                     name="role"
                                     id="role"
@@ -59,6 +92,8 @@ const Signup = () =>{
                                     type="password" 
                                     id="password" 
                                     name="password" 
+                                    value={password}
+                                    onChange={(e)=>setPassword(e.target.value)}
                                     required 
                                     className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 />
