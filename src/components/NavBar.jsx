@@ -50,7 +50,9 @@ const NavBar = ({ userDetails }) => {
                                             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                                                 <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                                                 <a href={role==='User' ? '/userdashboard' : '/admindashboard'} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                                <a href="/bookings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Bookings</a>
+                                                {role === 'User' && (
+                                                    <a href="/bookings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Bookings</a>
+                                                )}
                                                 <hr className="my-1" />
                                                 <a href="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
                                             </div>
