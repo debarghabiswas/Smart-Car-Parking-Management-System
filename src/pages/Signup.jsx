@@ -36,19 +36,37 @@ const Signup = () =>{
     };
 
     return(
-        <div>
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-md w-full space-y-8 border rounded-xl p-5 bg-white shadow-lg">
-                    <div>
-                        <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                            SIGNUP FORM
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8">
+                <div className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 p-8">
+                    <div className="text-center mb-8">
+                        <div className="mx-auto h-12 w-12 bg-white rounded-xl flex items-center justify-center mb-4">
+                            <svg className="h-6 w-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <h1 className="text-2xl font-bold text-white tracking-tight">
+                            Create Account
                         </h1>
+                        <p className="text-gray-400 text-sm mt-2">Sign up to get started with our platform</p>
                     </div>
-                    <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
-                        <p className="text-center">{message}</p>
-                        <div className="space-y-4">
-                            <div className="form-group">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name:</label>
+
+                    <form className="space-y-6" onSubmit={handleSignUp}>
+                        {message && (
+                            <div className={`p-3 rounded-lg text-sm font-medium text-center ${
+                                message.includes('ERROR') || message.includes('error') 
+                                    ? 'bg-red-900/50 text-red-300 border border-red-700' 
+                                    : 'bg-green-900/50 text-green-300 border border-green-700'
+                            }`}>
+                                {message}
+                            </div>
+                        )}
+
+                        <div className="space-y-5">
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-semibold text-gray-300 mb-2">
+                                    Full Name
+                                </label>
                                 <input 
                                     type="text"
                                     id="name"
@@ -56,11 +74,15 @@ const Signup = () =>{
                                     value={username}
                                     onChange={(e)=>setUsername(e.target.value)}
                                     required
-                                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    className="w-full px-4 py-3 border border-gray-600 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white placeholder-gray-400"
+                                    placeholder="Enter your full name"
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
+                                    Email Address
+                                </label>
                                 <input 
                                     type="email" 
                                     id="email" 
@@ -68,26 +90,33 @@ const Signup = () =>{
                                     value={email}
                                     onChange={(e)=>setEmail(e.target.value)}
                                     required 
-                                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    className="w-full px-4 py-3 border border-gray-600 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white placeholder-gray-400"
+                                    placeholder="Enter your email address"
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role:</label>
+
+                            <div>
+                                <label htmlFor="role" className="block text-sm font-semibold text-gray-300 mb-2">
+                                    Account Type
+                                </label>
                                 <select
                                     value={selectedRole}
                                     onChange={handleChange}
                                     name="role"
                                     id="role"
                                     required
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="w-full px-4 py-3 border border-gray-600 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white"
                                 >   
-                                    <option value="">-- Select --</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="User">User</option>
+                                    <option value="">Select account type</option>
+                                    <option value="Admin">Parking Lot Administrator</option>
+                                    <option value="User">Standard User</option>
                                 </select>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-semibold text-gray-300 mb-2">
+                                    Password
+                                </label>
                                 <input 
                                     type="password" 
                                     id="password" 
@@ -95,26 +124,28 @@ const Signup = () =>{
                                     value={password}
                                     onChange={(e)=>setPassword(e.target.value)}
                                     required 
-                                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    className="w-full px-4 py-3 border border-gray-600 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-white placeholder-gray-400"
+                                    placeholder="Create a secure password"
                                 />
-                            </div>       
+                            </div>
                         </div>
-                        <div>
-                            <button 
-                                type="submit"
-                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Signup
-                            </button>
-                        </div>
-                    </form>
-                    <div className="text-center">
-                        <p 
-                            type="button"
-                            className="text-indigo-600 hover:text-indigo-500"
+
+                        <button 
+                            type="submit"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 shadow-lg"
                         >
-                            <a href="/login">
-                                Already have an account? Login
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div className="mt-6 pt-6 border-t border-gray-700">
+                        <p className="text-center text-sm text-gray-400">
+                            Already have an account?{' '}
+                            <a 
+                                href="/login" 
+                                className="font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                            >
+                                Sign in here
                             </a>
                         </p>
                     </div>

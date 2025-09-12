@@ -1,15 +1,14 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import cors from 'cors';
 
 import authRoute from './routes/auth.js';
+import parklotsRoute from './routes/parklots.js'
 import { authMiddleware } from './middlewares/authMiddleware.js';
 
 
-dotenv.config({ path: "./server/.env" });
+dotenv.config({path:'./server/.env'});
 
 const app = express();
 const PORT = process.env.PORT;
@@ -27,6 +26,9 @@ mongoose.connect(process.env.MONGODB_URL, {useNewUrlParser:true, useUnifiedTopol
 // API: /api/auth Routes
 app.use('/api/auth', authRoute);
 
+// API: /api/parklots
+app.use('/api/parklots', parklotsRoute);
+
 // API: Server Health checking Route
 app.get('/api/health', (req, res)=>{
     res.json({message: "Server is running!"});
@@ -37,6 +39,12 @@ app.get('/api/tokenverify', authMiddleware, (req, res)=>{
     const user = req.user;
     res.json({message: "✅You are Authorized", user});
 });
+
+// Middleware for handling Unknown API routes
+app.use((req,res,next)=>{
+    res.status(404).json({message:"404-API Route not found."});
+});
+
 
 
 // Start server

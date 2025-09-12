@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-import Users from '../models/Users.js';
-import Admin from '../models/Admin.js';
+import Users from '../models/UserAuthentication.js';
+import Admin from '../models/AdminAuthentication.js';
 
 dotenv.config({path:'./server/.env'});
 
@@ -56,7 +56,7 @@ router.post('/login', async (req, res)=>{
             const token = jwt.sign(
                 {username: user.username, email: user.email, role: 'User'},
                 process.env.SECRET_KEY,
-                {expiresIn: '5h'},
+                {expiresIn: '1h'},
             );
 
             res.json({
@@ -77,7 +77,7 @@ router.post('/login', async (req, res)=>{
             const token = jwt.sign(
                 {username: admin.username, email: admin.email, role: 'Admin'},
                 process.env.SECRET_KEY,
-                {expiresIn: '5h'},
+                {expiresIn: '1h'},
             );
 
             res.json({
