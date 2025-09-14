@@ -1,5 +1,37 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 const DashboardAdmin = ({adminDetails}) =>{
     const {username, email, role} = adminDetails || {};
+
+    const [plotDetails, setPlotDetails] = useState(null);
+
+    useEffect(()=>{
+        const fetchPlotDetails = async ()=>{
+            if (!email) return;
+            
+            try {
+                const response = await axios.post('http://localhost:2025/api/parklots/getlots', {
+                    email: email,
+                });
+                setPlotDetails(response.data.lots || []);
+            } catch (error) {
+                console.error("Error fetching parking lots:", error);
+                setMessage(error.response?.data?.message || "Error fetching parking lots");
+            }
+        };
+
+        fetchPlotDetails();
+
+    }, [email]);
+
+    const totals = plotDetails?.reduce((acc, lot)=>{
+        acc.availableSpots += lot.unreservedLots;
+        acc.occupiedSpots += lot.reservedLots;
+        acc.totalSpots += lot.unreservedLots + lot.reservedLots;
+        return acc;
+    },{availableSpots:0, occupiedSpots:0, totalSpots:0}) || {availableSpots:0, occupiedSpots:0, totalSpots:0};
+
     
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -29,7 +61,7 @@ const DashboardAdmin = ({adminDetails}) =>{
                         <div className="flex items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-medium text-slate-600 uppercase tracking-wide">Total Spots</h3>
-                                <p className="text-3xl font-bold text-slate-900 mt-2">100</p>
+                                <p className="text-3xl font-bold text-slate-900 mt-2">{totals.totalSpots}</p>
                             </div>
                             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +75,7 @@ const DashboardAdmin = ({adminDetails}) =>{
                         <div className="flex items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-medium text-slate-600 uppercase tracking-wide">Available</h3>
-                                <p className="text-3xl font-bold text-emerald-600 mt-2">45</p>
+                                <p className="text-3xl font-bold text-emerald-600 mt-2">{totals.availableSpots}</p>
                             </div>
                             <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
                                 <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +89,7 @@ const DashboardAdmin = ({adminDetails}) =>{
                         <div className="flex items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-medium text-slate-600 uppercase tracking-wide">Occupied</h3>
-                                <p className="text-3xl font-bold text-red-600 mt-2">55</p>
+                                <p className="text-3xl font-bold text-red-600 mt-2">{totals.occupiedSpots}</p>
                             </div>
                             <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                                 <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +103,7 @@ const DashboardAdmin = ({adminDetails}) =>{
                         <div className="flex items-center justify-between">
                             <div>
                                 <h3 className="text-sm font-medium text-slate-600 uppercase tracking-wide">Revenue Today</h3>
-                                <p className="text-3xl font-bold text-amber-600 mt-2">$230</p>
+                                <p className="text-3xl font-bold text-amber-600 mt-2">$255</p>
                             </div>
                             <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
                                 <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

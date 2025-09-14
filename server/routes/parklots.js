@@ -1,9 +1,10 @@
 import express from 'express';
-import AdminParkingLots from '../models/AdminParkingLots.js';
 
+import AdminParkingLots from '../models/AdminParkingLots.js';
 
 const router = express.Router();
 
+// API: Registering Parking Lot
 router.post('/registerlot', async (req, res)=>{
     try{
         const {email, parkingLotName, parkingLotLocation, parkingLotAddress, totalLots, rate} = req.body;
@@ -40,7 +41,7 @@ router.post('/registerlot', async (req, res)=>{
     }
 });
 
-
+// API: Getting Parking Lot details based on Email
 router.post('/getlots', async (req, res)=>{
     try{
         const {email} = req.body;
@@ -55,6 +56,7 @@ router.post('/getlots', async (req, res)=>{
     }
 });
 
+// API: Searching for parking lots based on queries
 router.post('/search', async (req, res)=>{
     try{
         const {q} = req.body;
@@ -70,6 +72,7 @@ router.post('/search', async (req, res)=>{
     }
 });
 
+// API: Getting 3 random parking lot data
 router.get('/doc3', async (req, res)=>{
     try{
         const results = await AdminParkingLots.aggregate([
@@ -77,7 +80,7 @@ router.get('/doc3', async (req, res)=>{
         ]);
 
         res.status(200).json({
-            message: "Successfully Retrieved the 4 Documents",
+            message: "Successfully Retrieved the 3 Documents",
             lots: results,
         });
 
@@ -86,4 +89,50 @@ router.get('/doc3', async (req, res)=>{
     }
 });
 
+// API: Getting parking lot details based on the ID
+router.get('/plots/:id', async (req, res)=>{
+    try{
+        const {id} = req.params;
+
+        const plot = await AdminParkingLots.findById({_id:id});
+        if(!plot) return res.status(400).json({message: "❌Plot with the given ID is not found"});
+
+        res.status(200).json({
+            message: "✅Successfully Fetched Plot",
+            plot:plot,
+        });
+
+    } catch(err){
+        res.status(500).json({error: "❌Error Finding Plot"});
+    }
+});
+
+// API: Updating Reserved and Unreserved Lots
+router.put('/updatelots/:id', async (req, res)=>{
+    try{
+        const {unreservedLots, reservedLots} = req.body;
+        const {id} = req.params;
+
+        const existPlot = await AdminParkingLots.findById(id);
+        if(!existPlot) return res.status(400).json({message: "❌Plot doesn't exist"});
+
+        const updatePlot = await AdminParkingLots.findByIdAndUpdate(id, {unreservedLots, reservedLots}, {
+            new: true,
+            runValidators: true,
+        });
+
+        if(!updatePlot) return res.status(400).json({message: "❌Plot not found"});
+
+        res.status(200).json({
+            message: "Successfully updated the details",
+            lot: updatePlot,
+        });
+
+    } catch(err){
+        res.status(500).json({error: "Error Updating Parking Lot details"});
+    }
+});
+
+
+// Exporting the router
 export default router;

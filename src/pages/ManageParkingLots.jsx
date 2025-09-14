@@ -51,7 +51,7 @@ const ManageParkingLots=({userDetails})=>{
 
         } catch(e){
             console.error("Error submitting form:", e);
-            setMessage(e.response?.data?.message || "ERROR SUBMITTING FORM");
+            setMessage(e.response?.data?.error || "ERROR SUBMITTING FORM");
         }
     };
 
@@ -90,7 +90,7 @@ const ManageParkingLots=({userDetails})=>{
                         <h2 className="text-2xl font-bold text-white mb-6 text-center">Add New Parking Lot</h2>
                         <form className="space-y-4" onSubmit={handleSubmit}>
                             {message && (
-                            <div className={`text-center p-4 rounded-lg text-sm ${message.includes('ERROR') || message.includes('error') 
+                            <div className={`text-center p-4 rounded-lg text-sm ${message.includes('ERROR') || message.includes('Error') 
                                 ? 'bg-red-500/20 border border-red-500/30 text-red-300' 
                                 : 'bg-green-500/20 border border-green-500/30 text-green-300'
                             }`}>

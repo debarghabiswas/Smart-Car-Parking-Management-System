@@ -18,6 +18,7 @@ import Signup from "./pages/Signup";
 import Profile from './pages/Profile';
 import Bookings from "./pages/Bookings";
 import ManageParkingLots from "./pages/ManageParkingLots";
+import Plots from "./pages/Plots";
 
 export default function App(){
     const token = localStorage.getItem('token');
@@ -56,11 +57,11 @@ export default function App(){
                 <Route path="/about" element={<About />}/>
                 <Route path="/contactus" element={<ContactUs />}/>
                 <Route path="/pricing" element={<Pricing />}/>
-                <Route path="/login" element={token && userDetails ? <Navigate to={userDetails.role === "User" ? '/userdashboard' : '/admindashboard'} /> : <Login />}/>
+                <Route path="/login" element={token && userDetails ? <Navigate to={userDetails.role === "User" ? '/' : '/admindashboard'} /> : <Login />}/>
                 <Route path="/signup" element={<Signup />}/>
                 <Route path="/logout" element={<Logout />}/>
-                <Route path="/admindashboard" element={<DashboardAdmin adminDetails={userDetails}/>}/>
-                <Route path="/userdashboard" element={<DashboardUser userDetails={userDetails} />}/>
+                <Route path="/admindashboard" element={!token ? <Navigate to="/" /> : (userDetails && userDetails.role !== "Admin" ? <Navigate to="/" /> : <DashboardAdmin adminDetails={userDetails}/>)}/>
+                <Route path="/userdashboard" element={!token ? <Navigate to="/" /> :(userDetails && userDetails.role !== "User" ? <Navigate to="/" /> : <DashboardUser userDetails={userDetails} />)}/>
                 <Route path="/profile" element={<Profile userDetails={userDetails} />}/>
                 <Route path="/bookings" element={userDetails && userDetails.role === "Admin" ? <Navigate to="/" /> : <Bookings />} />
                 <Route path="/manage-parkinglots" element={
@@ -74,6 +75,8 @@ export default function App(){
                         <Navigate to="/login" />
                     )
                 } />
+                <Route path="/plots/:id" element={<Plots />}/>
+
                 {/* NOT FOUND  */}
                 <Route path="*" element={<NotFound />} />
             </Routes>

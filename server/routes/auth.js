@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 import Users from '../models/UserAuthentication.js';
@@ -95,6 +95,24 @@ router.post('/login', async (req, res)=>{
     } catch(err){
         res.status(500).json({error: err.message});
     }
+});
+
+router.get('/getdetails', async(req, res)=>{
+    const token = req.headers['authorization']?.split(" ")[1];
+
+    if(!token) return res.status(400).json({message: "❌Access Denied. Invalid format"});
+
+    try{
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        res.status(200).json({
+            message: "Successfully get the details",
+            details: decoded,
+        });
+
+    } catch(err){
+        res.status(500).json({error: "Invalid Token"});
+    }
+
 });
 
 export default router;
